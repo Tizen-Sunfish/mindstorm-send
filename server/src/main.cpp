@@ -9,6 +9,8 @@
 #include <glib.h>
 #include <bluetooth.h>
 
+#include <dbus/dbus.h>
+
 #undef LOG_TAG
 #define LOG_TAG "REMOTE_KEY_FW"
 
@@ -279,55 +281,63 @@ gboolean timeout_func_cb(gpointer data)
 	return FALSE;
 }
 
+
+static void
+send_config(DBusConnection *connection)
+{
+	DBusMessage *message;
+	message = dbus_message_new_signal("/org/share/linux",
+			"org.share.linux", "Config");
+
+	/* Send the signal */
+	dbus_connection_send(connection, message, NULL);
+	dbus_message_unref(message);
+}
+
+static void
+send_quit(DBusConnection *connection)
+{
+	DBusMessage *message;
+	message = dbus_message_new_signal("/org/share/linux",
+			"org.share.linux", "Quit");
+
+	/* Send the signal */
+	dbus_connection_send(connection, message, NULL);
+	dbus_message_unref(message);
+}
+
+
 int main(int argc, char *argv[])
 {
-	int error, ret = 0;
-	const char default_device_name[] = "Tizen-RK";
-	const char *device_name = NULL;
-
-	ALOGD("Hello World!\n");
-
-
-/*	gMainLoop = g_main_loop_new(NULL, FALSE);
-	ALOGD("Sever started\n");
-
-	if(argc < 2) {
-		char errMsg[] = "No bluetooth device name, so its name is set as default.";
-		printf("%s\n", errMsg);
-		ALOGW("%s\n", errMsg);
-		device_name = default_device_name;
-	} else {
-		device_name = argv[1];
+	int i;	
+	DBusConnection *connection;
+	DBusError error;
+	dbus_error_init(&error);
+	connection = dbus_bus_get(DBUS_BUS_SESSION, &error);
+	if(!connection)
+	{
+		printf("Failed to connect to the D-BUS daemon: %s",
+				error.message);
+		dbus_error_free(&error);
+		return 1;
 	}
 
-	// Initialize bluetooth
-	error = rkf_initialize_bluetooth(device_name);
-	if(error != 0) {
-		ret = -2;
-		goto error_end_without_socket;
-	}
-	ALOGD("succeed in rkf_initialize_bluetooth()\n");
-
-	// Listen connection
-	error = rkf_listen_connection();
-	if(error != 0) {
-		ret = -3;
-		goto error_end_with_socket;
+	if(argc == 1){
+		return 0;
 	}
 
-	// If succeed to accept a connection, start a main loop.
-	rkf_main_loop();
+	for(i=1 ; i<argc ; ++i){
+		if(!strcmp(argv[i], "-c")){
+			send_config(connection);
+		}
+		else if(!strcmp(argv[i], "-q")){
+			send_quit(connection);
+		}
+	}
 
-	ALOGI("Server is terminated successfully\n");
+	ALOGD("Hello World! I am SEND code!\n");
 
-error_end_with_socket:
-	// Finalized bluetooth
-	rkf_finalize_bluetooth_socket();
-
-error_end_without_socket:
-	rkf_finalize_bluetooth();
-*/
-	return ret;
+	return 0;
 }
 
 //! End of a file

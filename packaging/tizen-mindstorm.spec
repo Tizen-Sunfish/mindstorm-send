@@ -15,6 +15,9 @@ BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(capi-network-bluetooth)
 BuildRequires:  pkgconfig(capi-system-info)
 BuildRequires:  pkgconfig(dlog)
+BuildRequires:  pkgconfig(dbus-glib-1)
+BuildRequires:  pkgconfig(dbus-1)
+
 
 ## Description string that this package's human users can understand
 %description
