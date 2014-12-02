@@ -1,12 +1,11 @@
 ## Basic Descriptions of this package
-Name:       tizen-mindstorm
-Summary:    Tizen Mindstorm
+Name:       mindstorm-send
+Summary:    Tizen Mindstorm send
 Version:		0.1
 Release:    1
 Group:      Framework/system
 License:    Apache License, Version 2.0
 Source0:    %{name}-%{version}.tar.gz
-Source1:    tizen-mindstorm.service
 
 # Required packages
 # Pkgconfig tool helps to find libraries that have already been installed
@@ -53,8 +52,8 @@ cp LICENSE %{buildroot}/usr/share/license/%{name}
 
 ## Binary Package: File list
 %files
-%manifest tizen-mindstorm.manifest
-%{_bindir}/mindstorm_server
+%manifest mindstorm-send.manifest
+%{_bindir}/mindstorm-send
 #%{_libdir}/systemd/system/remote-key-framework.service
 #%{_libdir}/systemd/system/graphical.target.wants/remote-key-framework.service
 /usr/share/license/%{name}
