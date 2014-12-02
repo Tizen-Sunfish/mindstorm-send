@@ -7,13 +7,11 @@ INCLUDE(FindPkgConfig)
 PKG_CHECK_MODULES(rpkgs-dlog REQUIRED dlog)
 PKG_CHECK_MODULES(rpkgs-capi REQUIRED capi-network-bluetooth capi-system-info)
 PKG_CHECK_MODULES(rpkgs-glib REQUIRED glib-2.0)
-PKG_CHECK_MODULES(rpkgs-dbus REQUIRED dbus-1 dbus-glib-1)
 
 # Add CFLAGS used for required modules
 ADD_DEFINITIONS(${rpkgs-dlog_CFLAGS})
 ADD_DEFINITIONS(${rpkgs-capi_CFLAGS})
 ADD_DEFINITIONS(${rpkgs-glib_CFLAGS})
-ADD_DEFINITIONS(${rpkgs-dbus_CFLAGS})
 
 # Set include directories
 INCLUDE_DIRECTORIES(
@@ -21,7 +19,9 @@ INCLUDE_DIRECTORIES(
 	${rpkgs-dlog_INCLUDE_DIRS}
 	${rpkgs-capi_INCLUDE_DIRS}
 	${rpkgs-glib_INCLUDE_DIRS}
-	${rpkgs-dbus_INCLUDE_DIRS}
+	/usr/include/dbus-1.0
+	/usr/lib/dbus-1.0/include
+	/usr/lib/glib-2.0/include
 	)
 
 # Set sources
@@ -32,6 +32,9 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 
 # Set LDFLAGS
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${rpkgs-dlog_LDFLAGS} ${rpkgs-capi_LDFLAGS} ${rpkgs-glib_LDFLAGS} ${rpkgs_dbus_CFLAGS} "-ldl -lrt")
+# SET LINKER FLAGS
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} "-ldbus-1" )
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} "-ldbus-glib-1" )
 
 # Set CFLAGS
 ADD_DEFINITIONS(-Wall -O3) 
