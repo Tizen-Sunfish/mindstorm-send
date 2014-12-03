@@ -12,7 +12,7 @@
 #include <dbus/dbus.h>
 
 #undef LOG_TAG
-#define LOG_TAG "REMOTE_KEY_FW"
+#define LOG_TAG "MINDSTORM_SEND"
 
 static GMainLoop* gMainLoop = NULL;
 static bt_adapter_visibility_mode_e gVisibilityMode = BT_ADAPTER_VISIBILITY_MODE_NON_DISCOVERABLE;
