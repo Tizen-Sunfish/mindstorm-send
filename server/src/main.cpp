@@ -286,8 +286,8 @@ static void
 send_config(DBusConnection *connection)
 {
 	DBusMessage *message;
-	message = dbus_message_new_signal("/org/share/linux",
-			"org.share.linux", "Config");
+	message = dbus_message_new_signal("/User/Mindstorm/API",
+			"User.Mindstorm.API", "Config");
 
 	/* Send the signal */
 	dbus_connection_send(connection, message, NULL);
@@ -298,8 +298,8 @@ static void
 send_quit(DBusConnection *connection)
 {
 	DBusMessage *message;
-	message = dbus_message_new_signal("/org/share/linux",
-			"org.share.linux", "Quit");
+	message = dbus_message_new_signal("/User/Mindstorm/API",
+			"User.Mindstorm.API", "Quit");
 
 	/* Send the signal */
 	dbus_connection_send(connection, message, NULL);
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
 	DBusConnection *connection;
 	DBusError error;
 	dbus_error_init(&error);
-	connection = dbus_bus_get(DBUS_BUS_SESSION, &error);
+	connection = dbus_bus_get(DBUS_BUS_SYSTEM, &error);
 	if(!connection)
 	{
 		printf("Failed to connect to the D-BUS daemon: %s",
