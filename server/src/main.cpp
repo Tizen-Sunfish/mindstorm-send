@@ -328,9 +328,11 @@ int main(int argc, char *argv[])
 
 	for(i=1 ; i<argc ; ++i){
 		if(!strcmp(argv[i], "-c")){
+			ALOGD("ESLAB: SEND CONFIG \n");
 			send_config(connection);
 		}
 		else if(!strcmp(argv[i], "-q")){
+			ALOGD("ESLAB: SEND QUIT \n");
 			send_quit(connection);
 		}
 	}
