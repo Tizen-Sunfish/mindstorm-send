@@ -299,6 +299,23 @@ send_config(DBusConnection *connection, int motor, int power)
 	dbus_message_unref(message);
 }
 
+
+static void
+send_beep(DBusConnection *connection)
+{
+	DBusMessage *message;
+	message = dbus_message_new_signal("/User/Mindstorm/API",
+			"User.Mindstorm.API", "Beep");
+
+	dbus_message_append_args(message,
+		DBUS_TYPE_INVALID);
+
+	/* Send the signal */
+	dbus_connection_send(connection, message, NULL);
+	dbus_message_unref(message);
+}
+
+
 static void
 send_quit(DBusConnection *connection)
 {
@@ -342,14 +359,18 @@ int main(int argc, char *argv[])
 		power = atoi(argv[3]);
 		send_config(connection, type, power);
 	}
-	else if(!strcmp(argv[1], "-q")){
-		send_quit(connection);
-	}
 	else if(!strcmp(argv[1], "stop")){
 		ALOGD("Stop motors");
 		for(int i=0 ; i<3 ; ++i){
 			send_config(connection, i, 0);
 		}
+	}
+	else if(!strcmp(argv[1], "beep")){
+		ALOGD("Beep sound");
+		send_beep();
+	}
+	else if(!strcmp(argv[1], "-q")){
+		send_quit(connection);
 	}
 
 
