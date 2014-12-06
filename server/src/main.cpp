@@ -342,9 +342,10 @@ int main(int argc, char *argv[])
 	}
 	else if(!strcmp(argv[1], "-q")){
 		send_quit(connection);
+	}else{
+		ALOGD("Usage : ./mindstorm_send motor type power"); 
 	}
 
-	ALOGD("Hello World! I am SEND code!\n");
 
 	return 0;
 }
