@@ -283,11 +283,16 @@ gboolean timeout_func_cb(gpointer data)
 
 
 static void
-send_config(DBusConnection *connection)
+send_config(DBusConnection *connection, int motor, int power)
 {
 	DBusMessage *message;
 	message = dbus_message_new_signal("/User/Mindstorm/API",
-			"User.Mindstorm.API", "Config");
+			"User.Mindstorm.API", "Motor");
+
+	dbus_message_append_args(message,
+		DBUS_TYPE_INT32, &motor,
+		DBUS_TYPE_INT32, &power,
+		DBUS_TYPE_INVALID);
 
 	/* Send the signal */
 	dbus_connection_send(connection, message, NULL);
@@ -326,13 +331,17 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	for(i=1 ; i<argc ; ++i){
-		if(!strcmp(argv[i], "-c")){
-			send_config(connection);
+	if(!strcmp(argv[1], "motor")) {
+		int type, power;
+		if (argc != 4) {
+			ALOGD("Usage : ./mindstorm_send motor type power"); 
 		}
-		else if(!strcmp(argv[i], "-q")){
-			send_quit(connection);
-		}
+		type = atoi(argv[2]);
+		power = atoi(argv[3]);
+		send_config(connection, type, power);
+	}
+	else if(!strcmp(argv[1], "-q")){
+		send_quit(connection);
 	}
 
 	ALOGD("Hello World! I am SEND code!\n");
