@@ -283,7 +283,7 @@ gboolean timeout_func_cb(gpointer data)
 
 
 static void
-send_config(DBusConnection *connection, int motor, int power)
+send_motor(DBusConnection *connection, int motor, int power)
 {
 	DBusMessage *message;
 	message = dbus_message_new_signal("/User/Mindstorm/API",
@@ -357,12 +357,12 @@ int main(int argc, char *argv[])
 		}
 		type = atoi(argv[2]);
 		power = atoi(argv[3]);
-		send_config(connection, type, power);
+		send_motor(connection, type, power);
 	}
 	else if(!strcmp(argv[1], "stop")){
 		ALOGD("Stop motors");
 		for(int i=0 ; i<3 ; ++i){
-			send_config(connection, i, 0);
+			send_motor(connection, i, 0);
 		}
 	}
 	else if(!strcmp(argv[1], "beep")){
