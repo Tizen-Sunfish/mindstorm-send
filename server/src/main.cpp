@@ -314,7 +314,9 @@ send_quit(DBusConnection *connection)
 
 int main(int argc, char *argv[])
 {
-	int i;	
+	int i;
+	int type, power;
+
 	DBusConnection *connection;
 	DBusError error;
 	dbus_error_init(&error);
@@ -332,9 +334,9 @@ int main(int argc, char *argv[])
 	}
 
 	if(!strcmp(argv[1], "motor")) {
-		int type, power;
 		if (argc != 4) {
-			ALOGD("Usage : ./mindstorm_send motor type power"); 
+			ALOGD("Usage : ./mindstorm_send motor type power");
+			return -1;
 		}
 		type = atoi(argv[2]);
 		power = atoi(argv[3]);
@@ -342,8 +344,12 @@ int main(int argc, char *argv[])
 	}
 	else if(!strcmp(argv[1], "-q")){
 		send_quit(connection);
-	}else{
-		ALOGD("Usage : ./mindstorm_send motor type power"); 
+	}
+	else if(!strcmp(argv[1], "stop")){
+		ALOGD("Stop motors");
+		for(int i=0 ; i<3 ; ++i){
+			send_config(connection, i, 0);
+		}
 	}
 
 
