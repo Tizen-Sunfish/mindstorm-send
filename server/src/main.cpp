@@ -331,10 +331,21 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+<<<<<<< HEAD
 	if(!strcmp(argv[1], "motor")) {
 		int type, power;
 		if (argc != 4) {
 			ALOGD("Usage : ./mindstorm_send motor type power"); 
+=======
+	for(i=1 ; i<argc ; ++i){
+		if(!strcmp(argv[i], "-c")){
+			ALOGD("ESLAB: SEND CONFIG \n");
+			send_config(connection);
+		}
+		else if(!strcmp(argv[i], "-q")){
+			ALOGD("ESLAB: SEND QUIT \n");
+			send_quit(connection);
+>>>>>>> 7b56abc238d782ec79236cc56a3fd91aa2d9b122
 		}
 		type = atoi(argv[2]);
 		power = atoi(argv[3]);
