@@ -367,7 +367,7 @@ int main(int argc, char *argv[])
 	}
 	else if(!strcmp(argv[1], "beep")){
 		ALOGD("Beep sound");
-		send_beep();
+		send_beep(connection);
 	}
 	else if(!strcmp(argv[1], "-q")){
 		send_quit(connection);
