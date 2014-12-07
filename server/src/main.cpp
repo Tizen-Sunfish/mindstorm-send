@@ -337,6 +337,38 @@ send_color(DBusConnection *connection, int color)
 	dbus_message_unref(message);
 }
 
+static void
+send_sonar(DBusConnection *connection, int command, int port)
+{
+	// command
+	// Setting:   0
+	// Distance Read : 1 
+	DBusMessage *message;
+
+	if (command == 0) {
+		message = dbus_message_new_signal("/User/Mindstorm/API",
+				"User.Mindstorm.API", "SonarSet");
+
+		dbus_message_append_args(message,
+			DBUS_TYPE_INT32, &port,
+			DBUS_TYPE_INVALID);
+	}
+
+	else if (command == 1) {
+		message = dbus_message_new_signal("/User/Mindstorm/API",
+				"User.Mindstorm.API", "SonarRead");
+
+		dbus_message_append_args(message,
+			DBUS_TYPE_INT32, &port,
+			DBUS_TYPE_INVALID);
+	}
+	else
+		return; 
+
+	/* Send the signal */
+	dbus_connection_send(connection, message, NULL);
+	dbus_message_unref(message);
+}
 
 static void
 send_quit(DBusConnection *connection)
@@ -412,6 +444,19 @@ int main(int argc, char *argv[])
 		ALOGD("Color off!");
 		send_color(connection, 4);
 	}
+
+	else if(!strcmp(argv[1], "sonar_set") && argc == 3){
+		int port = atoi(argv[2]);
+		ALOGD("Sorna Set");
+		send_sonar(connection, 0, port);
+	}
+
+	else if(!strcmp(argv[1], "sonar_read") && argc == 3){
+		int port = atoi(argv[2]);
+		ALOGD("Sorna Read");
+		send_sonar(connection, 1, port);
+	}
+
 	else if(!strcmp(argv[1], "-q")){
 		send_quit(connection);
 	}
