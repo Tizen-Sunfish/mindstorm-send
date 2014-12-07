@@ -338,7 +338,7 @@ send_color(DBusConnection *connection, int color)
 }
 
 static void
-send_sonar(DBusConnection *connection, int command)
+send_sonar(DBusConnection *connection, int command, int port)
 {
 	// command
 	// Setting:   0
@@ -350,6 +350,7 @@ send_sonar(DBusConnection *connection, int command)
 				"User.Mindstorm.API", "SonarSet");
 
 		dbus_message_append_args(message,
+			DBUS_TYPE_INT32, &port,
 			DBUS_TYPE_INVALID);
 	}
 
@@ -358,6 +359,7 @@ send_sonar(DBusConnection *connection, int command)
 				"User.Mindstorm.API", "SonarRead");
 
 		dbus_message_append_args(message,
+			DBUS_TYPE_INT32, &port,
 			DBUS_TYPE_INVALID);
 	}
 	else
@@ -369,14 +371,11 @@ send_sonar(DBusConnection *connection, int command)
 }
 
 static void
-send_play_kakao(DBusConnection *connection)
+send_quit(DBusConnection *connection)
 {
 	DBusMessage *message;
 	message = dbus_message_new_signal("/User/Mindstorm/API",
-			"User.Mindstorm.API", "PlayKakao");
-
-	dbus_message_append_args(message,
-		DBUS_TYPE_INVALID);
+			"User.Mindstorm.API", "Quit");
 
 	/* Send the signal */
 	dbus_connection_send(connection, message, NULL);
@@ -456,9 +455,9 @@ int main(int argc, char *argv[])
 		send_sonar(connection, 1);
 	}
 
-	else if(!strcmp(argv[1], "play_kakao")){
-		ALOGD("Play Kakao");
-		send_play_kakao(connection);
+	else if(!strcmp(argv[1], "play_kakko")){
+		ALOGD("Play Kakko");
+		send_play_kakko(connection);
 	}
 
 	return 0;
