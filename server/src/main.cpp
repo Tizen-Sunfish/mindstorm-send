@@ -299,7 +299,6 @@ send_motor(DBusConnection *connection, int motor, int power)
 	dbus_message_unref(message);
 }
 
-
 static void
 send_beep(DBusConnection *connection)
 {
@@ -308,6 +307,29 @@ send_beep(DBusConnection *connection)
 			"User.Mindstorm.API", "Beep");
 
 	dbus_message_append_args(message,
+		DBUS_TYPE_INVALID);
+
+	/* Send the signal */
+	dbus_connection_send(connection, message, NULL);
+	dbus_message_unref(message);
+}
+
+static void
+send_color(DBusConnection *connection, int color)
+{
+	// Color Types
+	// All:   0
+	// Red:   1
+	// Green: 2
+	// Blue:  3
+	// Off:   4
+
+	DBusMessage *message;
+	message = dbus_message_new_signal("/User/Mindstorm/API",
+			"User.Mindstorm.API", "Color");
+
+	dbus_message_append_args(message,
+		DBUS_TYPE_INT32, &color,
 		DBUS_TYPE_INVALID);
 
 	/* Send the signal */
@@ -368,6 +390,27 @@ int main(int argc, char *argv[])
 	else if(!strcmp(argv[1], "beep")){
 		ALOGD("Beep sound");
 		send_beep(connection);
+	}
+
+	else if(!strcmp(argv[1], "color_all")){
+		ALOGD("All color!");
+		send_color(connection, 0);
+	}
+	else if(!strcmp(argv[1], "red")){
+		ALOGD("Red color");
+		send_color(connection, 1);
+	}
+	else if(!strcmp(argv[1], "green")){
+		ALOGD("Green color");
+		send_color(connection, 2);
+	}
+	else if(!strcmp(argv[1], "blue")){
+		ALOGD("Blue color");
+		send_color(connection, 3);
+	}
+	else if(!strcmp(argv[1], "color_off")){
+		ALOGD("Color off!");
+		send_color(connection, 4);
 	}
 	else if(!strcmp(argv[1], "-q")){
 		send_quit(connection);
